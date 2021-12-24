@@ -1,14 +1,20 @@
 let myLibrary = [];
 const inputForm =  document.getElementById("input-form");
-const button = document.querySelector("button");
-button.addEventListener("click", (e) => {
+const newBook = document.getElementById("new-book");
+const saveBook = document.getElementById("save-book")
+newBook.addEventListener("click", (e) => {
     inputForm.style.display == "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
-    bookName = 
-    author = 
-    pages = 
-    read = 
-    console.log("aioweg");
+    console.log("bookName");
+});
+
+saveBook.addEventListener("click", (e) => {
+    inputForm.style.display == "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
+    let bookName = document.getElementById("bookName");
+    let author = document.getElementById("author");
+    let pages = document.getElementById("pages");
+    let read = document.getElementById("read");
     addBookToLibrary(bookName, author, pages, read)
+    displayBooks();
 });
 
 
@@ -28,8 +34,8 @@ function addBookToLibrary(bookName, author, pages, read) {
 }
 
 function displayBooks () {
-
+    console.log(myLibrary);
 }
 
-const theHobbit = new book("The Hobbit", "J.R.R. Tolkien", 295, "Not read yet");
-console.log(theHobbit.info());
+const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, "Not read yet");
+// console.log(theHobbit.info());
