@@ -6,17 +6,22 @@
         <script src="script.js" defer></script>
     </head>
     <body>
-        <button id="new-book">NEW BOOK</button>
-        <div id="input-form">
-            <label for="bookName">Book Name:</label>
-            <input type="text" id="bookName" name="bookName"><br>
-            <label for="author">Author:</label>
-            <input type="text" id="author" name="author"><br>
-            <label for="pages">Pages:</label>
-            <input type="number" id="pages" name="pages"><br>
-            <label for="read">Has Read:</label>
-            <input type="checkbox" id="read" name="read">
-            <button id="save-book">SAVE</button>
+        <div id="main-con">    
+            <button id="new-book">NEW BOOK</button>
+            <div id="book-con"></div>
+            <div id="input-form-modal">
+                <div id="input-form-con">    
+                    <label for="bookName">Book Name:</label>
+                    <input type="text" id="bookName" name="bookName">
+                    <label for="author">Author:</label>
+                    <input type="text" id="author" name="author">
+                    <label for="pages">Pages:</label>
+                    <input type="number" id="pages" name="pages">
+                    <label for="read">Has Read:</label>
+                    <input type="checkbox" id="read" name="read">
+                    <button id="save-book">SAVE</button>
+                </div>
+            </div>
         </div>
     </body>
 </html>
