@@ -1,31 +1,28 @@
 let myLibrary = [];
-const inputForm =  document.getElementById("input-form");
+const inputForm =  document.getElementById("input-form-modal");
 const newBook = document.getElementById("new-book");
-const saveBook = document.getElementById("save-book")
+const saveBook = document.getElementById("save-book");
+const bookCon = document.getElementById("book-con");
 newBook.addEventListener("click", (e) => {
-    inputForm.style.display == "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
-    console.log("bookName");
+    inputForm.style.display = "flex"
 });
 
 saveBook.addEventListener("click", (e) => {
-    inputForm.style.display == "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
-    let bookName = document.getElementById("bookName");
-    let author = document.getElementById("author");
-    let pages = document.getElementById("pages");
-    let read = document.getElementById("read");
+    inputForm.style.display === "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
+    let bookName = document.getElementById("bookName").value;
+    let author = document.getElementById("author").value;
+    let pages = document.getElementById("pages").value;
+    let read = document.getElementById("read").value;
     addBookToLibrary(bookName, author, pages, read)
     displayBooks();
 });
 
 
-function Book(name, author, pages, read) {
-    this.name = name;
+function Book(bookName, author, pages, read) {
+    this.bookName = bookName;
     this.author = author;
     this.pages = pages;
     this.read = read;
-    this.info = function() {
-        return `${name} by ${author}, ${pages} pages, ${read}`
-    }
 }
 
 function addBookToLibrary(bookName, author, pages, read) {
@@ -33,8 +30,17 @@ function addBookToLibrary(bookName, author, pages, read) {
     myLibrary.push(bookName);
 }
 
-function displayBooks () {
-    console.log(myLibrary);
+function displayBooks() {
+    const list = document.createElement("ul");
+    list.classList.add("card");
+    bookCon.appendChild(list);
+    for (const book of myLibrary) {
+        Object.keys(book).forEach(value => {
+            const listEl = document.createElement("li");
+            list.appendChild(listEl);
+            listEl.textContent = book[value];
+        });
+    }
 }
 
 const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, "Not read yet");
