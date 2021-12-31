@@ -44,7 +44,6 @@ function getRead(read, bookName) {
 
 
 function addBookToLibrary(bookName, author, pages, read) {
-    console.log(bookName);
     bookName = new Book(bookName, author, pages, read);
     myLibrary.push(bookName);
     return bookName;
@@ -61,15 +60,18 @@ function createCards(bookName) {
 
     const editButton = document.createElement("button");
     editButton.className = "edit-button";
-    editButton.classList.add("card-bottons")
+    editButton.classList.add("card-buttons")
     editButton.textContent = "Edit";
-    // editButton.addEventListener("click", )
+    // editButton.addEventListener("click", editCards(bookName))
     buttonDiv.appendChild(editButton);
     
     const delButton = document.createElement("button");
     delButton.className = "delete-button";
-    delButton.classList.add("card-bottons")
+    delButton.classList.add("card-buttons")
     delButton.textContent = "Close";
+    delButton.addEventListener("click", (e) => {
+        bookName = deleteCard(bookName, e);
+    });
     buttonDiv.appendChild(delButton);
 
     const list = document.createElement("ul");
@@ -79,12 +81,21 @@ function createCards(bookName) {
     displayBooks(bookName, list);
 }
 
+function editCards(bookName, e) {
+
+}
+
+function deleteCard(bookName, e) {
+    e.target.parentElement.parentElement.remove();
+    return bookName = {};
+    
+}
+
 function displayBooks(bookName, list) {
     for (value in bookName) {
         let re = /^[ ]+$/g;
         const listEl = document.createElement("li");
         list.appendChild(listEl);
-        console.log(bookName);
         if (re.test(bookName[value]) || bookName[value] === "") {
             bookName[value] = "N/A";
         }
@@ -107,6 +118,8 @@ function displayBooks(bookName, list) {
         }
     }
 }
+
+// document.querySelector(".delete-button").attachEvent("click", deleteCard());
 
 const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, "Not read yet");
 // console.log(theHobbit.info());
