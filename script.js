@@ -17,24 +17,63 @@ inputModal.addEventListener("mousedown", (e) => {
 
 saveBook.addEventListener("click", (e) => {
     inputForm.style.display === "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
+
     let bookName = document.getElementById("bookName").value;
     let author = document.getElementById("author").value;
     let pages = document.getElementById("pages").value;
     let read = document.getElementById("read").checked;
     bookName = addBookToLibrary(bookName, author, pages, read);
     createCards(bookName);
+
     document.querySelectorAll("#input-form-con > input").forEach((input) => {
         input.type == "checkbox" ? input.checked = false : input.value = ""; 
     });
 });
 
+function saveValues(editing = false, bookName) {
+    if (editing) {
+        bookName.bookName = document.getElementById("bookName").value;
+        bookName.author = document.getElementById("author").value;
+        bookName.pages = document.getElementById("pages").value;
+        bookName.read = document.getElementById("read").checked;
+    }
+    else {
+        let bookName = document.getElementById("bookName").value;
+        let author = document.getElementById("author").value;
+        let pages = document.getElementById("pages").value;
+        let read = document.getElementById("read").checked;
+        bookName = addBookToLibrary(bookName, author, pages, read);
+        createCards(bookName);
+    }
+    document.querySelectorAll("#input-form-con > input").forEach((input) => {
+        input.type == "checkbox" ? input.checked = false : input.value = ""; 
+    });
+}
+
+function assignValues(editing = false, bookName) {
+    if (editing) {
+        const list = document.querySelectorAll(`ul[data-key="${objectIndex(bookName)}"] > li`);
+        const inputs = document.querySelectorAll("#input-form-con > input");
+        for (let i = 0; i < list.length; i++) {
+            inputs[i].value = list[i].textContent;
+        }
+
+    }
+    else {
+        let bookName = document.getElementById("bookName").value;
+        let author = document.getElementById("author").value;
+        let pages = document.getElementById("pages").value;
+        let read = document.getElementById("read").checked;
+        bookName = addBookToLibrary(bookName, author, pages, read);
+    }
+}
 
 function Book(bookName, author, pages, read) {
     this.bookName = bookName;
     this.author = author;
     this.pages = pages;
     this.read = getRead(read, bookName);
-};
+}
 
 function getRead(read, bookName) {
     let re = /^[ ]+$/g;
@@ -62,7 +101,10 @@ function createCards(bookName) {
     editButton.className = "edit-button";
     editButton.classList.add("card-buttons")
     editButton.textContent = "Edit";
-    // editButton.addEventListener("click", editCards(bookName))
+    editButton.addEventListener("click", (e) => {
+        inputForm.style.display === "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
+        assignValues(true, bookName);
+    });
     buttonDiv.appendChild(editButton);
     
     const delButton = document.createElement("button");
@@ -75,14 +117,17 @@ function createCards(bookName) {
     buttonDiv.appendChild(delButton);
 
     const list = document.createElement("ul");
+    list.setAttribute("data-key", objectIndex(bookName));
     list.className = "card";
     card.appendChild(list);
 
     displayBooks(bookName, list);
 }
 
-function editCards(bookName, e) {
-
+function objectIndex(bookName) {
+    return myLibrary.findIndex((object) => {
+        return object === bookName;
+    });
 }
 
 function deleteCard(bookName, e) {
@@ -91,35 +136,35 @@ function deleteCard(bookName, e) {
     
 }
 
-function displayBooks(bookName, list) {
+function displayBooks(bookName, list, editing = false) {
     for (value in bookName) {
-        let re = /^[ ]+$/g;
         const listEl = document.createElement("li");
         list.appendChild(listEl);
-        if (re.test(bookName[value]) || bookName[value] === "") {
-            bookName[value] = "N/A";
-        }
-        switch (value) {
-            case "bookName": 
-                listEl.textContent = `Book Name: ${bookName[value]}`;
-                break;
-            case "author":
-                listEl.textContent = `Author: ${bookName[value]}`;
-                break;
-            case "pages":
-                listEl.textContent = `Pages read: ${bookName[value]}`;
-                break;
-            case "read":
-                if (bookName[value] === "N/A") {
-                    console.log("apple")
-                }
-                listEl.textContent = bookName[value];
-                break;
-        }
+
+        editValues(bookName, listEl, value);
     }
 }
 
-// document.querySelector(".delete-button").attachEvent("click", deleteCard());
-
-const theHobbit = new Book("The Hobbit", "J.R.R. Tolkien", 295, "Not read yet");
-// console.log(theHobbit.info());
+function editValues(bookName, listEl, value) {
+    let re = /^[ ]+$/g;
+    if (re.test(bookName[value]) || bookName[value] === "") {
+        bookName[value] = "N/A";
+    }
+    switch (value) {
+        case "bookName": 
+            listEl.textContent = `Book Name: ${bookName[value]}`;
+            break;
+        case "author":
+            listEl.textContent = `Author: ${bookName[value]}`;
+            break;
+        case "pages":
+            listEl.textContent = `Pages read: ${bookName[value]}`;
+            break;
+        case "read":
+            if (bookName[value] === "N/A") {
+                console.log("apple")
+            }
+            listEl.textContent = bookName[value];
+            break;
+    }
+}
