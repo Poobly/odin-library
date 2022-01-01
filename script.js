@@ -1,4 +1,5 @@
 let myLibrary = [];
+let editing = false;
 const inputForm =  document.getElementById("input-form-modal");
 const newBook = document.getElementById("new-book");
 const saveBook = document.getElementById("save-book");
@@ -8,7 +9,6 @@ const inputModal = document.getElementById("input-form-modal");
 newBook.addEventListener("click", (e) => {
     inputForm.style.display = "flex"
 });
-
 inputModal.addEventListener("mousedown", (e) => {
     if (e.target === e.currentTarget) {
         saveBook.click();
@@ -17,25 +17,20 @@ inputModal.addEventListener("mousedown", (e) => {
 
 saveBook.addEventListener("click", (e) => {
     inputForm.style.display === "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
-
-    let bookName = document.getElementById("bookName").value;
-    let author = document.getElementById("author").value;
-    let pages = document.getElementById("pages").value;
-    let read = document.getElementById("read").checked;
-    bookName = addBookToLibrary(bookName, author, pages, read);
-    createCards(bookName);
-
-    document.querySelectorAll("#input-form-con > input").forEach((input) => {
-        input.type == "checkbox" ? input.checked = false : input.value = ""; 
-    });
+    list = document.querySelector;
+    saveValues(e);
 });
 
-function saveValues(editing = false, bookName) {
+function saveValues(e) {
     if (editing) {
+        console.log(myLibrary[bookIndex]);
+        bookName = myLibrary[bookIndex];
         bookName.bookName = document.getElementById("bookName").value;
         bookName.author = document.getElementById("author").value;
         bookName.pages = document.getElementById("pages").value;
         bookName.read = document.getElementById("read").checked;
+        const list = document.querySelectorAll(`ul[data-key="${objectIndex(bookName)}"] > li`);
+        displayBooks(bookName, list)
     }
     else {
         let bookName = document.getElementById("bookName").value;
@@ -50,21 +45,19 @@ function saveValues(editing = false, bookName) {
     });
 }
 
-function assignValues(editing = false, bookName) {
-    if (editing) {
-        const list = document.querySelectorAll(`ul[data-key="${objectIndex(bookName)}"] > li`);
-        const inputs = document.querySelectorAll("#input-form-con > input");
-        for (let i = 0; i < list.length; i++) {
-            inputs[i].value = list[i].textContent;
+// assigns editing input values for modal
+function assignValues(bookName) {
+    const inputs = document.querySelectorAll("#input-form-con > input");
+    let i = 0;
+    for (value in bookName) {
+        if (bookName[value] === "N/A") bookName[value] = "";
+
+        else if (bookName[value] === bookName.read && inputs[i].type === "checkbox") {
+        inputs[i].checked = bookName[value];
         }
 
-    }
-    else {
-        let bookName = document.getElementById("bookName").value;
-        let author = document.getElementById("author").value;
-        let pages = document.getElementById("pages").value;
-        let read = document.getElementById("read").checked;
-        bookName = addBookToLibrary(bookName, author, pages, read);
+        if (bookName[value] !== bookName.read) inputs[i].value = bookName[value];
+        i++;
     }
 }
 
@@ -72,15 +65,8 @@ function Book(bookName, author, pages, read) {
     this.bookName = bookName;
     this.author = author;
     this.pages = pages;
-    this.read = getRead(read, bookName);
+    this.read = read; 
 }
-
-function getRead(read, bookName) {
-    let re = /^[ ]+$/g;
-    if (re.test(bookName) || bookName === "") bookName = "N/A";
-    return read == true ? `${bookName} has been read` : `${bookName} has not been read`;
-}
-
 
 function addBookToLibrary(bookName, author, pages, read) {
     bookName = new Book(bookName, author, pages, read);
@@ -102,8 +88,10 @@ function createCards(bookName) {
     editButton.classList.add("card-buttons")
     editButton.textContent = "Edit";
     editButton.addEventListener("click", (e) => {
+        editing = true;
+        bookIndex = e.target.parentElement.parentElement.querySelector("ul").dataset.key;
+        assignValues(bookName);
         inputForm.style.display === "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
-        assignValues(true, bookName);
     });
     buttonDiv.appendChild(editButton);
     
@@ -136,13 +124,21 @@ function deleteCard(bookName, e) {
     
 }
 
-function displayBooks(bookName, list, editing = false) {
+function displayBooks(bookName, list) {
+    let i = 0;
     for (value in bookName) {
-        const listEl = document.createElement("li");
-        list.appendChild(listEl);
-
+        let listEl;
+        if (!editing) {
+            listEl = document.createElement("li");
+            list.appendChild(listEl);
+        }
+        else {
+            listEl = list[i];
+        }
         editValues(bookName, listEl, value);
+        i++;
     }
+    editing = false;
 }
 
 function editValues(bookName, listEl, value) {
@@ -161,10 +157,9 @@ function editValues(bookName, listEl, value) {
             listEl.textContent = `Pages read: ${bookName[value]}`;
             break;
         case "read":
-            if (bookName[value] === "N/A") {
-                console.log("apple")
-            }
-            listEl.textContent = bookName[value];
+            bookName[value] ? 
+            listEl.textContent = `${bookName.bookName} has been read` :
+            listEl.textContent = `${bookName.bookName} has not been read`;
             break;
     }
 }
