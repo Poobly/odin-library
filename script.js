@@ -1,5 +1,6 @@
 let myLibrary = [];
 let editing = false;
+let bookIndex;
 const inputForm =  document.getElementById("input-form-modal");
 const newBook = document.getElementById("new-book");
 const saveBook = document.getElementById("save-book");
@@ -15,16 +16,17 @@ inputModal.addEventListener("mousedown", (e) => {
     }
 });
 
-saveBook.addEventListener("click", (e) => {
+
+saveBook.addEventListener("click", () => {
     inputForm.style.display === "none" ? inputForm.style.display = "flex" : inputForm.style.display = "none";
     list = document.querySelector;
-    saveValues(e);
+    saveValues();
 });
 
-function saveValues(e) {
+function saveValues() {
     if (editing) {
-        console.log(myLibrary[bookIndex]);
-        bookName = myLibrary[bookIndex];
+        console.log(bookIndex);
+        let bookName = myLibrary[bookIndex];
         bookName.bookName = document.getElementById("bookName").value;
         bookName.author = document.getElementById("author").value;
         bookName.pages = document.getElementById("pages").value;
