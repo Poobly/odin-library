@@ -63,11 +63,13 @@ function assignValues(bookName) {
     }
 }
 
-function Book(bookName, author, pages, read) {
-    this.bookName = bookName;
-    this.author = author;
-    this.pages = pages;
-    this.read = read; 
+class Book {
+    constructor(bookName, author, pages, read) {
+        this.bookName = bookName;
+        this.author = author;
+        this.pages = pages;
+        this.read = read; 
+    }
 }
 
 function addBookToLibrary(bookName, author, pages, read) {
